@@ -72,7 +72,7 @@ function processoptions()
         TELEPORT_COMMAND="dump"
       ;;
       -d|--dump)
-        TELEPORT_COMMAND=dump_by_type ${2}
+        TELEPORT_COMMAND="dump_by_type ${2}"
         shift
       ;;
       -u|--user)

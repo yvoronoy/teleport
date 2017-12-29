@@ -23,7 +23,7 @@ function dump_by_type()
 {
     local type=$1
     case "$type" in
-      db) type="db -i"
+      db) type="db${IGNORE_SANITIZE}"
         ;;
       code)
         ;;
@@ -61,6 +61,7 @@ Options:
  - -d|--dump code|db - make only a code or db dump
  - -u|--user username - if you want to specify different username for cloud, current user by default
  - -s|--server 1,2 or 3 - open ssh connection to a specified server
+ - -i|--ignore-sanitize - generate dumps without sanitizing customer data
 EOF
   exit 64
 }
@@ -79,6 +80,9 @@ function processoptions()
       ;;
       dump)
         TELEPORT_COMMAND="dump"
+      ;;
+      -i|--ignore-sanitize)
+        IGNORE_SANITIZE=' --ignore-sanitize'
       ;;
       -d|--dump)
         TELEPORT_COMMAND="dump_by_type ${2}"
@@ -101,6 +105,7 @@ function processoptions()
   done
 }
 
+IGNORE_SANITIZE=
 TELEPORT_COMMAND=help
 [ ! "${TELEPORT_USER}" ] && TELEPORT_USER=${USER}
 [[ $1 != *"-h"* ]] && PROJECT_ID=$1

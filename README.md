@@ -34,6 +34,7 @@ Options:
  - -d|--dump code|db - make only a code or db dump
  - -u|--user username - if you want to specify different username for cloud, current user by default
  - -s|--server 1,2 or 3 - open ssh connection to a specified server
+ - -i|--ignore-sanitize - generate dumps without sanitizing customer data
 ```
 
 ### Examples:

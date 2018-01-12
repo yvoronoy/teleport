@@ -22,15 +22,8 @@ function teleport_scp()
 function dump_by_type()
 {
     local type=$1
-    case "$type" in
-      db) type="db${IGNORE_SANITIZE}"
-        ;;
-      code)
-        ;;
-      *) echo "Invalid type: specify code or db";
-         exit 1;
-        ;;
-    esac
+    validateType ${type}
+    validateIfProcessExists
     echo "Starting ${type} backup..."
     teleport_send_cmd "php bin/magento support:backup:${type};" && {
     dumpsDirectory="var/support/"
@@ -47,6 +40,30 @@ function dump()
 {
   dump_by_type "code"
   dump_by_type "db"
+}
+
+function validateType()
+{
+    local type=$1
+    case "$type" in
+      db) type="db${IGNORE_SANITIZE}"
+        ;;
+      code)
+        ;;
+      *) echo "Invalid type: specify code or db";
+         exit 1;
+        ;;
+    esac
+}
+
+function validateIfProcessExists()
+{
+    local output=$(teleport_send_cmd "ps aux | grep support:backup | grep -v grep")
+    if [ "${output}" ]
+    then
+        echo "Please wait a few minutes for another process will be finished";
+        exit 1;
+    fi
 }
 
 function help()

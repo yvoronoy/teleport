@@ -23,7 +23,6 @@ function dump_by_type()
 {
     local type=$1
     validateType ${type}
-    validateIfProcessExists
     echo "Starting ${type} backup..."
     teleport_send_cmd "php bin/magento support:backup:${type};"; {
     dumpsDirectory="var/support/"

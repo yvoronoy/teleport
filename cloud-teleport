@@ -39,8 +39,13 @@ function dump()
 {
   showMagentoVersion
   validateIfProcessExists
+  if [ -z "$1" ]
+  then
   dump_by_type "code"
   dump_by_type "db"
+  else
+    dump_by_type $1
+  fi
   removeSupportBackupFlag
 }
 
@@ -116,7 +121,7 @@ function processoptions()
         IGNORE_SANITIZE=' --ignore-sanitize'
       ;;
       -d|--dump)
-        TELEPORT_COMMAND="dump_by_type ${2}"
+        TELEPORT_COMMAND="dump ${2}"
         shift
       ;;
       -u|--user)

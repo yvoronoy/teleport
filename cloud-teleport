@@ -37,8 +37,16 @@ function dump_by_type()
 
 function dump()
 {
+  showMagentoVersion
+  validateIfProcessExists
   dump_by_type "code"
   dump_by_type "db"
+  removeSupportBackupFlag
+}
+
+function showMagentoVersion()
+{
+  teleport_send_cmd "php bin/magento -V"
 }
 
 function validateType()
@@ -58,12 +66,18 @@ function validateType()
 
 function validateIfProcessExists()
 {
-    local output=$(teleport_send_cmd "ps aux | grep support:backup | grep -v grep")
+    local output=$(teleport_send_cmd "test -f /tmp/.magento.support.backup && echo found")
     if [ "${output}" ]
     then
         echo "Please wait a few minutes for another process will be finished";
         exit 1;
     fi
+    teleport_send_cmd "touch /tmp/.magento.support.backup"
+}
+
+function removeSupportBackupFlag()
+{
+    teleport_send_cmd "rm /tmp/.magento.support.backup"
 }
 
 function help()
